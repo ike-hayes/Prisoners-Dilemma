@@ -5,15 +5,25 @@
 * @version (a version number or a date)
 */
 import java.util.Scanner;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileWriter;
 public class Game
 {
     // instance variables - replace the example below with your own
+    File playerScore=new File("playerscore.csv"); 
     Scanner input=new Scanner(System.in);
     int score;
     int oppScore;
+    int totalScore;
+    int roundsPlayed;
+    int totalRoundsPlayed;
+    double gameplayRating;
     String action="silent";
     String oppAction;
     String opp;
+    String scoreLine[];
+    String roundsPlayedLine[];
     boolean oppChosen=false;
     boolean playing=true;
     /**
@@ -22,6 +32,16 @@ public class Game
     public Game()
     {
         // initialise instance variables
+        try{
+            Scanner fileReader=new Scanner(playerScore);
+            scoreLine=fileReader.nextLine().split(",");
+            totalScore=Integer.parseInt(scoreLine[1]);
+            roundsPlayedLine=fileReader.nextLine().split(",");
+            totalRoundsPlayed=Integer.parseInt(roundsPlayedLine[1]);
+            gameplayRating=totalRoundsPlayed/totalScore;
+        }catch(IOException e){
+            e.printStackTrace();
+        }
         System.out.println("Welcome to the Prisoner's Dilemma! \n"
                     +"How to play:\n"
                     +"\n"
@@ -35,14 +55,21 @@ public class Game
                     +"You snitch, they don't: No time added to your sentence, but 5 to theirs \n"
                     +"They snitch, you don't: 5 years added to your sentence, none to theirs \n"
                     +"You both snitch: 4 years added to both your sentences \n"
-                    +"Try to keep your sentence as low as possible, lower than your partner! \n"
+                    +"Try to keep your sentence as low as possible! \n"
                     +"\n"
                     +"Let's play!");
+        System.out.println("You have played: "+totalRoundsPlayed+" rounds \n"
+                            +"You are serving: "+totalScore+" years in prison");
+        if(totalScore==0){
+            System.out.println("Your gameplay rating is: Perfect! \n");
+        }else{
+            System.out.println("Your gameplay rating is: "+gameplayRating+"\n");
+        }
         System.out.println("Choose your partner \n"
                    +"James - friendly \n"
-                   +"Robert - forigivng \n"
+                   +"Robert - forgiving \n"
                    +"Frank - fair \n"
-                   +"Snake - ruthless \n");
+                   +"Snake - ruthless \n");     
         while(!oppChosen){
             opp=input.nextLine().toLowerCase();
             if(opp.equals("james") || opp.equals("robert") || opp.equals("frank") || opp.equals("snake")){
@@ -97,6 +124,7 @@ public class Game
             System.out.println("You are serving "+score+" years in prison \n"
                            +"Your partner is serving "+oppScore+" years in prison"
                            +"\n");
+            roundsPlayed++;
         }
         System.out.println("Thank you for playing! Here are your final scores: \n"
                     +"You will serve "+score+" years in prison \n"
@@ -107,6 +135,20 @@ public class Game
             System.out.println("Looks like your partner came out better off!");
         }else{
             System.out.println("You and your partner will serve the same time");
+        }
+        try{
+            FileWriter scoreTracker=new FileWriter(playerScore);
+            scoreTracker.append("score");
+            scoreTracker.append(",");
+            scoreTracker.append(String.valueOf(score+totalScore));
+            scoreTracker.append("\n");
+            scoreTracker.append("roundsplayed");
+            scoreTracker.append(",");
+            scoreTracker.append(String.valueOf(roundsPlayed+totalRoundsPlayed));
+            scoreTracker.flush();
+            scoreTracker.close();
+        }catch(IOException e){
+            e.printStackTrace();
         }
     }
     public void alwaysSilentAI(){
