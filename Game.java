@@ -16,10 +16,10 @@ public class Game
     //here I create the file used to read and write the players score, as well as the scanner to take input
     int score;
     int oppScore;
-    int totalScore;
-    int roundsPlayed;
+    float totalScore;
+    float roundsPlayed;
     int totalRoundsPlayed;
-    double gameplayRating;
+    float gameplayRating;
     String action="silent";
     String oppAction;
     String opp;
@@ -40,7 +40,7 @@ public class Game
             totalScore=Integer.parseInt(scoreLine[1]);
             roundsPlayedLine=fileReader.nextLine().split(",");
             totalRoundsPlayed=Integer.parseInt(roundsPlayedLine[1]);
-            gameplayRating=totalRoundsPlayed/totalScore;
+            if(totalScore!=0)gameplayRating=totalRoundsPlayed/totalScore;
             /*This reads the file to find the players overall score and rounds played
              * including ones from previous sessions. It does this by seperating the csv
              * file using a split function to find commmas.
@@ -88,7 +88,7 @@ public class Game
                 System.out.println("Please enter one of the availiable partners");
             }
         }
-        //This makes sure the player chooses a valid opponent
+        //This makes sure the player chooses a valid opponent. If they enter anything else the loop will continue.
         while(playing){
             switch(opp){
                 case("james"):alwaysSilentAI();
@@ -104,7 +104,7 @@ public class Game
             System.out.println("Would you like to snitch on your partner? y/n \n"
                         +"Type 'stop' to stop playing");
             action=input.nextLine().toLowerCase();
-            //Then the player choose if they want to talk or stay silent
+            //Then the player chooses if they want to talk or stay silent
             switch(action){
                 case("y"):
                 case("yes"):
