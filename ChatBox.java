@@ -8,7 +8,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-public abstract class ChatBox extends JFrame implements ActionListener{
+public class ChatBox extends JFrame implements ActionListener{
     JTextField tf = new JTextField(10);
     JTextArea ta = new JTextArea();
     public void main() {
@@ -16,6 +16,7 @@ public abstract class ChatBox extends JFrame implements ActionListener{
         JFrame frame = new JFrame("Chat Frame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 400);
+        
         
         //Creating the MenuBar and adding components
         JMenuBar mb = new JMenuBar();
@@ -55,7 +56,7 @@ public abstract class ChatBox extends JFrame implements ActionListener{
         add(send);
         send.addActionListener(this);
     }
-    public void sendActionPerformed(ActionEvent e) { 
+    public void actionPerformed(ActionEvent e) { 
        String str;
        str = tf.getText();
        tf.setText("");

@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 //importing the extra features my program uses - it will need to read and write files.
 public class Game
 {
@@ -27,6 +28,9 @@ public class Game
     String roundsPlayedLine[];
     boolean oppChosen=false;
     boolean playing=true;
+    ArrayList<Integer> playerMoves=new ArrayList<Integer>();
+    long averageMove;
+    double totalMove;
     //creating the variables used in the game
     /**
     * Constructor for objects of class Game
@@ -78,11 +82,12 @@ public class Game
                    +"James - friendly \n"
                    +"Robert - forgiving \n"
                    +"Frank - fair \n"
-                   +"Snake - ruthless \n"); 
+                   +"Snake - ruthless \n"
+                   +"Or play against Hugh, an approximation of a human player"); 
         //The player can select which opponent to play agaisnt, who will use different strategies
         while(!oppChosen){
             opp=input.nextLine().toLowerCase();
-            if(opp.equals("james") || opp.equals("robert") || opp.equals("frank") || opp.equals("snake")){
+            if(opp.equals("james") || opp.equals("robert") || opp.equals("frank") || opp.equals("snake") || opp.equals("hugh")){
                 oppChosen=true;
             }else{
                 System.out.println("Please enter one of the availiable partners");
@@ -99,6 +104,8 @@ public class Game
                               break; 
                 case("snake"):alwaysSnitchAI();
                               break;
+                case("hugh"):advancedAI();
+                              break;
             }
             //The computer selects their move before the player
             System.out.println("Would you like to snitch on your partner? y/n \n"
@@ -109,6 +116,7 @@ public class Game
                 case("y"):
                 case("yes"):
                 case("snitch"):
+                        playerMoves.add(2);
                         if(oppAction.equals("snitch")){
                             System.out.println("You and your partner snitched on each other!");
                             oppScore+=4;
@@ -122,6 +130,7 @@ public class Game
                 case("no"):
                 case("silent"):
                 case("stay silent"):
+                        playerMoves.add(1);
                         if(oppAction.equals("snitch")){
                             System.out.println("Your partner snitched on you, and you stayed silent!");
                             score+=5;
@@ -156,7 +165,7 @@ public class Game
             System.out.println("You and your partner will serve the same time");
         }
         //This is final bit of text telling the player how they did
-        try{
+        /*try{
             FileWriter scoreTracker=new FileWriter(playerScore);
             scoreTracker.append("score");
             scoreTracker.append(",");
@@ -169,8 +178,8 @@ public class Game
             scoreTracker.close();
             //Updates the total score and rounds played across mutiple sessions
         }catch(IOException e){
-            e.printStackTrace();
-        }
+            System.out.println("There was an error saving your scores!");
+        }*/
     }
     public void alwaysSilentAI(){
         oppAction="silent";
@@ -204,5 +213,26 @@ public class Game
     /*This AI will do the same as the previous one, except it has a small chance to stay silent even
      * if the player snitched on the last round. This is to prevent long streaks of both players snitching
      * and racking up a high score
+     */
+    public void advancedAI(){
+        if(playerMoves.size()==0) oppAction="silent";
+        for(int i=0; i<playerMoves.size(); i++){
+        	totalMove=totalMove+playerMoves.get(i);
+        }
+        averageMove=Math.round(totalMove/playerMoves.size());
+        if(averageMove==1){
+            if(Math.random()<0.1) oppAction="snitch";
+            else oppAction="silent";
+        }
+        if(averageMove==2){ 
+            if(Math.random()<0.3) oppAction="silent";
+            else oppAction="snitch";
+        }
+    }
+    /* This opponent finds what the players average move is. If the
+     * player usually stays silent, the opponent will stay silent with 
+     * a 10% chance of snitching instead. If the player usually snitches,
+     * the opponent will also snitch with a 30% of staying silent instead.
+     * This makes it hard for the player to figure out what it will do.
      */
 }
