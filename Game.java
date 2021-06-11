@@ -28,9 +28,8 @@ public class Game
     String roundsPlayedLine[];
     boolean oppChosen=false;
     boolean playing=true;
-    ArrayList<Integer> playerMoves=new ArrayList<Integer>();
-    long averageMove;
-    double totalMove;
+    int silentChosen;
+    int snitchChosen;
     //creating the variables used in the game
     /**
     * Constructor for objects of class Game
@@ -116,7 +115,7 @@ public class Game
                 case("y"):
                 case("yes"):
                 case("snitch"):
-                        playerMoves.add(2);
+                        snitchChosen++;
                         if(oppAction.equals("snitch")){
                             System.out.println("You and your partner snitched on each other!");
                             oppScore+=4;
@@ -130,7 +129,7 @@ public class Game
                 case("no"):
                 case("silent"):
                 case("stay silent"):
-                        playerMoves.add(1);
+                        silentChosen++;
                         if(oppAction.equals("snitch")){
                             System.out.println("Your partner snitched on you, and you stayed silent!");
                             score+=5;
@@ -165,7 +164,7 @@ public class Game
             System.out.println("You and your partner will serve the same time");
         }
         //This is final bit of text telling the player how they did
-        /*try{
+        try{
             FileWriter scoreTracker=new FileWriter(playerScore);
             scoreTracker.append("score");
             scoreTracker.append(",");
@@ -179,7 +178,7 @@ public class Game
             //Updates the total score and rounds played across mutiple sessions
         }catch(IOException e){
             System.out.println("There was an error saving your scores!");
-        }*/
+        }
     }
     public void alwaysSilentAI(){
         oppAction="silent";
@@ -215,16 +214,11 @@ public class Game
      * and racking up a high score
      */
     public void advancedAI(){
-        if(playerMoves.size()==0) oppAction="silent";
-        for(int i=0; i<playerMoves.size(); i++){
-        	totalMove=totalMove+playerMoves.get(i);
-        }
-        averageMove=Math.round(totalMove/playerMoves.size());
-        if(averageMove==1){
+        oppAction="silent";
+        if(silentChosen>snitchChosen){
             if(Math.random()<0.1) oppAction="snitch";
             else oppAction="silent";
-        }
-        if(averageMove==2){ 
+        }else{
             if(Math.random()<0.3) oppAction="silent";
             else oppAction="snitch";
         }
