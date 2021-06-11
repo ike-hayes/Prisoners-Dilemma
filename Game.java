@@ -2,7 +2,7 @@
 * Write a description of class Game here.
 *
 * @author Ike Hayes
-* @version (a version number or a date)
+* @version 11/6/21
 */
 import java.util.Scanner;
 import java.io.IOException;
@@ -89,7 +89,7 @@ public class Game
             if(opp.equals("james") || opp.equals("robert") || opp.equals("frank") || opp.equals("snake") || opp.equals("hugh")){
                 oppChosen=true;
             }else{
-                System.out.println("Please enter one of the availiable partners");
+                System.out.println("Please enter one of the available partners");
             }
         }
         //This makes sure the player chooses a valid opponent. If they enter anything else the loop will continue.
@@ -142,7 +142,8 @@ public class Game
                 case("stop"):
                          playing=false;
                          break;
-                default:System.out.println("Choose yes to snitch, or no to stay silent");
+                default:System.out.println("Choose yes to snitch, or no to stay silent \n"
+                                           +"or stop to stop playing.");
                         break;
                 //If the player chooses something invalid it will ask them to choose again
             }
@@ -177,7 +178,7 @@ public class Game
             scoreTracker.close();
             //Updates the total score and rounds played across mutiple sessions
         }catch(IOException e){
-            System.out.println("There was an error saving your scores!");
+            System.out.println("There was an error saving your scores.");
         }
     }
     public void alwaysSilentAI(){
@@ -215,12 +216,15 @@ public class Game
      */
     public void advancedAI(){
         oppAction="silent";
+        //the ai will be silent by default
         if(silentChosen>snitchChosen){
             if(Math.random()<0.1) oppAction="snitch";
             else oppAction="silent";
+            //this happens if the player has stayed silent more than snitching
         }else{
             if(Math.random()<0.3) oppAction="silent";
             else oppAction="snitch";
+            //and vice versa
         }
     }
     /* This opponent finds what the players average move is. If the
