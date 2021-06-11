@@ -8,9 +8,11 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-public class ChatBox extends JFrame implements ActionListener{
+public class ChatBox extends JFrame implements ActionListener, KeyListener{
     JTextField tf = new JTextField(10);
     JTextArea ta = new JTextArea();
+    JButton send = new JButton("Send");
+    JButton reset = new JButton("Reset");
     public void main() {
         //Creating the Frame
         JFrame frame = new JFrame("Chat Frame");
@@ -34,10 +36,16 @@ public class ChatBox extends JFrame implements ActionListener{
         JLabel label = new JLabel("Enter Text");
          // accepts upto 10 characters
 
-        JButton reset = new JButton("Reset");
+        
+        
+        
+        
+        reset.addActionListener(this);
+        send.addActionListener(this);
+        
         panel.add(label); // Components Added using Flow Layout
         panel.add(tf);
-        
+        panel.add(send);
         panel.add(reset);
         ta.setEditable(false);
         
@@ -47,19 +55,34 @@ public class ChatBox extends JFrame implements ActionListener{
         frame.getContentPane().add(BorderLayout.CENTER, ta);
         frame.setVisible(true);
      
-        
+        tf.addKeyListener(this);
         // Text Area at the Center
         
     }
     public ChatBox(){
-        JButton send = new JButton("Send");
-        add(send);
-        send.addActionListener(this);
+        main();
     }
     public void actionPerformed(ActionEvent e) { 
-       String str;
-       str = tf.getText();
-       tf.setText("");
-       ta.append(str+"\n");
+       if(e.getSource()==send){
+           String str;
+           str = tf.getText();
+           tf.setText("");
+           ta.append(str+"\n");
+       }
+       if(e.getSource()==reset){
+           ta.setText(null);
+       }
     }    
+    public void keyPressed(KeyEvent e){
+        if(e.getKeyCode()==KeyEvent.VK_ENTER){
+           String str;
+           str = tf.getText();
+           tf.setText("");
+           if(!str.equals("")){
+               ta.append(str+"\n");
+           }
+        }
+    }
+    public void keyReleased(KeyEvent e){}
+    public void keyTyped(KeyEvent e){}
 }
