@@ -17,14 +17,12 @@ public class ServerSide
     {
         // initialise instance variables
         try{
+            System.out.println("Your IP is "+InetAddress.getLocalHost().getHostAddress()+". Tell your friend to connect here!");
             ServerSocket listen=new ServerSocket(3456);
             Socket mySocket=listen.accept();
             DataInputStream input=new DataInputStream(mySocket.getInputStream());
-            String message = input.readUTF();
-            System.out.println(message);
-            listen.close();
         } catch(Exception e){
-            e.printStackTrace();
+            System.out.println("Something went wrong hosting the server");
         }     
     }
 }

@@ -11,24 +11,21 @@ import java.util.Scanner;
 public class ClientSide
 {
     // instance variables - replace the example below with your own
+    String hostIP;
     /**
      * Constructor for objects of class ClientSide
      */
     public ClientSide()
     {
         // initialise instance variables
-        Scanner kb=new Scanner(System.in);
+        Scanner input=new Scanner(System.in);
         try{
-            Socket mySocket=new Socket("localhost",3456);
+            System.out.println("Enter the IP address you would like to connect to");
+            hostIP=input.nextLine();
+            Socket mySocket=new Socket(hostIP,3456);
             DataOutputStream output=new DataOutputStream(mySocket.getOutputStream());
-            String message=kb.nextLine();
-            System.out.println(message);
-            output.writeUTF(message);
-            output.flush();
-            output.close();
-            mySocket.close();
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("Something went wrong connecting to that host");
         }
     }
 }

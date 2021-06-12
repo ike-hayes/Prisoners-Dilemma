@@ -29,6 +29,8 @@ public class Online
     String username;
     String usernameLine[];
     boolean usernameChosen=false;
+    boolean hostChosen=false;
+    boolean host;
     /**
      * Constructor for objects of class Online
      */
@@ -83,7 +85,16 @@ public class Online
             System.out.println("Your gameplay rating is: "+gameplayRating+"\n");
         }
         System.out.println("Would you like to host a game or join an existing one?");
-        
+        while(!hostChosen){
+            switch(input.nextLine()){
+                case("host"):host=true; 
+                             break;
+                case("join"):host=false;
+                             break;
+                default:System.out.println("Please choose host or join");
+                        break;
+            }
+        }
         
         try{
             FileWriter scoreTracker=new FileWriter(playerScore);
