@@ -37,22 +37,37 @@ public class Online
     public Online()
     {
         // initialise instance variables
-        try{
-            Scanner fileReader=new Scanner(playerScore);
-            scoreLine=fileReader.nextLine().split(",");
-            totalScore=Double.parseDouble(scoreLine[1]);
-            roundsPlayedLine=fileReader.nextLine().split(",");
-            totalRoundsPlayed=Double.parseDouble(roundsPlayedLine[1]);
-            if(totalScore!=0)gameplayRating=totalRoundsPlayed/totalScore;
-            usernameLine=fileReader.nextLine().split(",");
-            /*This reads the file to find the players overall score and rounds played
-             * including ones from previous sessions. It does this by seperating the csv
-             * file using a split function to find commmas.
-             */
-        }catch(IOException e){
-            System.out.println("There was an error retrieving your past scores");
-            //This code is inside a try statement so I can print something out if something goes wrong
+        accessScores();
+        chooseUsername();
+        //Here the player selects their username, unless they already have one
+        System.out.println("You have played: "+(int)totalRoundsPlayed+" rounds \n"
+                            +"You are serving: "+(int)totalScore+" years in prison");
+        if(totalScore==0){
+            System.out.println("Your gameplay rating is: Perfect! \n");
+        }else{
+            System.out.println("Your gameplay rating is: "+gameplayRating+"\n");
         }
+        System.out.println("Would you like to host a game or join an existing one?");
+        while(!hostChosen){
+            switch(input.nextLine()){
+                case("host"):host=true; 
+                             break;
+                case("join"):host=false;
+                             break;
+                default:System.out.println("Please choose host or join");
+                        break;
+            }
+        }
+        if(host){
+            new ServerSide();
+        }else{
+            System.out.println("Enter the IP address you would like to connect to");
+            new ClientSide(input.nextLine());
+        }
+        
+        saveScores();
+    }
+    public void chooseUsername(){
         if(usernameLine.length<2){
             System.out.println("Please choose a username. This can be changed at any time");
             while(!usernameChosen){
@@ -76,26 +91,26 @@ public class Online
             username=usernameLine[1];
             System.out.println("Welcome back, "+username);
         }
-        //Here the player selects their username, unless they already have one
-        System.out.println("You have played: "+(int)totalRoundsPlayed+" rounds \n"
-                            +"You are serving: "+(int)totalScore+" years in prison");
-        if(totalScore==0){
-            System.out.println("Your gameplay rating is: Perfect! \n");
-        }else{
-            System.out.println("Your gameplay rating is: "+gameplayRating+"\n");
+    }
+    public void accessScores(){
+        try{
+            Scanner fileReader=new Scanner(playerScore);
+            scoreLine=fileReader.nextLine().split(",");
+            totalScore=Double.parseDouble(scoreLine[1]);
+            roundsPlayedLine=fileReader.nextLine().split(",");
+            totalRoundsPlayed=Double.parseDouble(roundsPlayedLine[1]);
+            if(totalScore!=0)gameplayRating=totalRoundsPlayed/totalScore;
+            usernameLine=fileReader.nextLine().split(",");
+            /*This reads the file to find the players overall score and rounds played
+             * including ones from previous sessions. It does this by seperating the csv
+             * file using a split function to find commmas.
+             */
+        }catch(IOException e){
+            System.out.println("There was an error retrieving your past scores");
+            //This code is inside a try statement so I can print something out if something goes wrong
         }
-        System.out.println("Would you like to host a game or join an existing one?");
-        while(!hostChosen){
-            switch(input.nextLine()){
-                case("host"):host=true; 
-                             break;
-                case("join"):host=false;
-                             break;
-                default:System.out.println("Please choose host or join");
-                        break;
-            }
-        }
-        
+    }
+    public void saveScores(){
         try{
             FileWriter scoreTracker=new FileWriter(playerScore);
             scoreTracker.append("score");
