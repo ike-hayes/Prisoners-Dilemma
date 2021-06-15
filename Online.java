@@ -28,9 +28,11 @@ public class Online
     String roundsPlayedLine[];
     String username;
     String usernameLine[];
+    String hostIP;
     boolean usernameChosen=false;
     boolean hostChosen=false;
     boolean host;
+    boolean clientConnected=false;
     /**
      * Constructor for objects of class Online
      */
@@ -38,7 +40,12 @@ public class Online
     {
         // initialise instance variables
         accessScores();
-        chooseUsername();
+        if(usernameLine[1].equals(null)){
+            chooseUsername();
+        }else{
+            username=usernameLine[1];
+            System.out.println("Welcome back, "+username);
+        }
         //Here the player selects their username, unless they already have one
         System.out.println("You have played: "+(int)totalRoundsPlayed+" rounds \n"
                             +"You are serving: "+(int)totalScore+" years in prison");
@@ -59,37 +66,41 @@ public class Online
             }
         }
         if(host){
-            new ServerSide();
+            ServerSide server=new ServerSide();
+            ClientSide player1=new ClientSide("localhost");
         }else{
-            System.out.println("Enter the IP address you would like to connect to");
-            new ClientSide(input.nextLine());
+            while(!clientConnected){
+                System.out.println("Enter the IP address you would like to connect to");
+                hostIP=input.nextLine();
+                try{
+                    ClientSide player2=new ClientSide(hostIP);
+                    clientConnected=true;
+                }catch(Exception e){
+                    System.out.println("Something went wrong connecting to that host");
+                }
+            }
         }
         
         saveScores();
     }
     public void chooseUsername(){
-        if(usernameLine.length<2){
-            System.out.println("Please choose a username. This can be changed at any time");
-            while(!usernameChosen){
-                username=input.nextLine();
-                System.out.println("You are "+username+"? y/n");
-                switch(input.nextLine()){
-                    case("y"):
-                    case("yes"):
-                                usernameChosen=true;
-                                break;
-                    case("n"):
-                    case("no"):
-                               System.out.println("Enter your username again");
-                               break;
-                    default:
+        System.out.println("Please choose a username. This can be changed at any time");
+        while(!usernameChosen){
+            username=input.nextLine();
+            System.out.println("You are "+username+"? y/n");
+            switch(input.nextLine()){
+                case("y"):
+                case("yes"):
+                            usernameChosen=true;
+                            break;
+                case("n"):
+                case("no"):
                            System.out.println("Enter your username again");
-                           break;   
-                }
+                           break;
+                default:
+                       System.out.println("Enter your username again");
+                       break;   
             }
-        }else{
-            username=usernameLine[1];
-            System.out.println("Welcome back, "+username);
         }
     }
     public void accessScores(){
