@@ -1,8 +1,8 @@
 /**
  * Write a description of class Online here.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Ike Hayes
+ * @version 14/6/21
  */
 import java.util.Scanner;
 import java.io.IOException;
