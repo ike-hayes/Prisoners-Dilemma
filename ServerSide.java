@@ -12,6 +12,7 @@ public class ServerSide
     Socket socket=null;
     ServerSocket server=null;
     DataInputStream streamIn=null;
+    int MAXPLAYERS=2;
     // instance variables - replace the example below with your own
     /**
      * Constructor for objects of class NetworkTesting
