@@ -11,6 +11,7 @@ public class Game
     //here I create the scanner to take input
     boolean online;
     boolean gameTypeChosen=false;
+    String gameType;
     //creating the variables used in the set up for the game
     /**
     * Constructor for objects of class Game
@@ -37,13 +38,14 @@ public class Game
         System.out.println("Would you like to play offline, or online? \n" 
                            +"Your offline and online scores are saved seperatly");
         while(!gameTypeChosen){
-            if(input.nextLine().equals("offline")){
+            gameType=input.nextLine().toUpperCase();
+            if(gameType.equals("OFFLINE")){
                 online=false;  
                 gameTypeChosen=true;
-            }else if(input.nextLine().equals("online")){
+            }else if(gameType.equals("ONLINE")){
                 online=true;   
                 gameTypeChosen=true;
-            }else {
+            }else{
                 System.out.println("Please choose offline or online");
             }
         }

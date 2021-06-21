@@ -19,7 +19,6 @@ public class Online
     Scanner input=new Scanner(System.in);
     //here I create the file used to read and write the players score, as well as the scanner to take input
     double score;
-    double oppScore;
     double totalScore;
     double roundsPlayed;
     double totalRoundsPlayed;
@@ -40,7 +39,7 @@ public class Online
     {
         // initialise instance variables
         accessScores();
-        if(usernameLine[1].equals(null)){
+        if(usernameLine.length<2){
             chooseUsername();
         }else{
             username=usernameLine[1];
@@ -54,34 +53,40 @@ public class Online
         }else{
             System.out.println("Your gameplay rating is: "+gameplayRating+"\n");
         }
+        saveScores();
         System.out.println("Would you like to host a game or join an existing one?");
         while(!hostChosen){
             switch(input.nextLine()){
                 case("host"):host=true; 
+                             hostChosen=true; 
                              break;
                 case("join"):host=false;
+                             hostChosen=true;
                              break;
                 default:System.out.println("Please choose host or join");
                         break;
             }
         }
         if(host){
-            ServerSide server=new ServerSide();
-            ClientSide player1=new ClientSide("localhost");
+            try{
+                ServerSide serverHost=new ServerSide();
+                ClientSide player=new ClientSide("localhost");
+            }catch(Exception e){
+                System.out.println("Something went wrong hosting the server");
+            }
         }else{
             while(!clientConnected){
                 System.out.println("Enter the IP address you would like to connect to");
                 hostIP=input.nextLine();
                 try{
-                    ClientSide player2=new ClientSide(hostIP);
+                    ClientSide player=new ClientSide(hostIP);
                     clientConnected=true;
                 }catch(Exception e){
                     System.out.println("Something went wrong connecting to that host");
+                    clientConnected=false;
                 }
             }
         }
-        
-        saveScores();
     }
     public void chooseUsername(){
         System.out.println("Please choose a username. This can be changed at any time");
