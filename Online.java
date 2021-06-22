@@ -32,6 +32,7 @@ public class Online
     boolean hostChosen=false;
     boolean host;
     boolean clientConnected=false;
+    //variables used for the game
     /**
      * Constructor for objects of class Online
      */
@@ -53,7 +54,9 @@ public class Online
         }else{
             System.out.println("Your gameplay rating is: "+gameplayRating+"\n");
         }
+        //the gameplay rating shows how well the player does across many sessions
         saveScores();
+        //scores are saved again to add the players username if they didn't already have one
         System.out.println("Would you like to host a game or join an existing one?");
         while(!hostChosen){
             switch(input.nextLine()){
@@ -67,6 +70,7 @@ public class Online
                         break;
             }
         }
+        //the player chooses to start a server or join one
         if(host){
             try{
                 ServerSide serverHost=new ServerSide();
@@ -74,6 +78,7 @@ public class Online
             }catch(Exception e){
                 System.out.println("Something went wrong hosting the server");
             }
+            //the player hosts their own server for someone to connect to
         }else{
             while(!clientConnected){
                 System.out.println("Enter the IP address you would like to connect to");
@@ -86,6 +91,7 @@ public class Online
                     clientConnected=false;
                 }
             }
+            //the user joins an existing server. it asks for an IP address and tries to connect
         }
     }
     public void chooseUsername(){
@@ -107,6 +113,10 @@ public class Online
                        break;   
             }
         }
+        /*the player chooses a username so they can identify
+         * themselves online with other players. this helps to
+         * keep track of who people are playing against
+         */
     }
     public void accessScores(){
         try{

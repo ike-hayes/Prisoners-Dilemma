@@ -58,16 +58,20 @@ public class SinglePlayer
         }else{
             System.out.println("Your gameplay rating is: "+gameplayRating+"\n");
         }
+        /*the gameplay rating should indicate how well the player does
+         * over multiple sessions. It is made to show how well the player does
+         * at keeping their own score low.
+         */
         System.out.println("Choose your partner \n"
                            +"James - friendly \n"
-                           +"Robert - forgiving \n"
-                           +"Frank - fair \n"
                            +"Snake - ruthless \n"
-                           +"Or play against Hugh, an approximation of a human player"); 
+                           +"Frank - fair \n"
+                           +"Robert - forgiving \n"
+                           +"Or play against Hugh, an approximation of a human player (recommended)"); 
         //The player can select which opponent to play agaisnt, who will use different strategies
         while(!oppChosen){
-            opp=input.nextLine().toLowerCase();
-            if(opp.equals("james") || opp.equals("robert") || opp.equals("frank") || opp.equals("snake") || opp.equals("hugh")){
+            opp=input.nextLine().toUpperCase();
+            if(opp.equals("JAMES") || opp.equals("ROBERT") || opp.equals("FRANK") || opp.equals("SNAKE") || opp.equals("HUGH")){
                 oppChosen=true;
             }else{
                 System.out.println("Please enter one of the available partners");
@@ -76,15 +80,15 @@ public class SinglePlayer
         //This makes sure the player chooses a valid opponent. If they enter anything else the loop will continue.
         while(playing){
             switch(opp){
-                case("james"):alwaysSilentAI();
+                case("JAMES"):alwaysSilentAI();
                               break;
-                case("robert"):titForTatForgivingAI();
+                case("ROBERT"):titForTatForgivingAI();
                               break;
-                case("frank"):titForTatAI();
+                case("FRANK"):titForTatAI();
                               break; 
-                case("snake"):alwaysSnitchAI();
+                case("SNAKE"):alwaysSnitchAI();
                               break;
-                case("hugh"):advancedAI();
+                case("HUGH"):advancedAI();
                               break;
             }
             //The computer selects their move before the player
@@ -120,6 +124,7 @@ public class SinglePlayer
                             oppScore+=2;
                         }
                         break;
+                //updating the scores based on moves chosen
                 case("stop"):
                          playing=false;
                          break;

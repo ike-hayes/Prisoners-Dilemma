@@ -30,7 +30,7 @@ public class ServerSide
     {
         // initialise instance variables
         try{
-            System.out.println("Your IP is "+InetAddress.getLocalHost().getHostAddress()+". Tell your friend to connect here!");
+            System.out.println("Your IP is "+InetAddress.getLocalHost().getHostAddress()+" tell your friend to connect here!");
             server=new ServerSocket(PORT);
         } catch(Exception e){
             System.out.println("Something went wrong hosting the server");
@@ -111,6 +111,7 @@ public class ServerSide
         System.out.println("Starting game with "+usernames[0]+" and "+usernames[1]);
         int roundsToPlay=20;
         for (int i=0;i<MAXPLAYERS;i++){
+            System.out.println("Telling "+usernames[i]+" game has started");
             try {
                 streamOut[i].writeUTF("Game has started!");
             } catch (Exception e){
@@ -121,7 +122,7 @@ public class ServerSide
             for (int i=0;i< MAXPLAYERS;i++){
                 System.out.print("Listening for "+usernames[i]+" move.  ");
                 try{
-                    choices[i]=streamIn[i].readUTF();
+                    choices[i]=streamIn[i].readUTF().toUpperCase();
                     System.out.print(usernames[i]+" has chosen "+choices[i]);
                 } catch (Exception e){
                     System.out.println("Couldn't recieve player move");

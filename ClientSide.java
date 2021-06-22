@@ -95,7 +95,7 @@ public class ClientSide
             }
             streamOut.close();
         }catch(Exception e){
-            System.out.println("Something went wrong joining the game");
+            System.out.println("Something went wrong playing the game");
         }
         try{
             score=Double.parseDouble(streamIn.readUTF());

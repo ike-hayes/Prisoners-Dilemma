@@ -49,7 +49,7 @@ public class Game
                 System.out.println("Please choose offline or online");
             }
         }
-        //here the player choose whether they would like to play online or offline
+        //the player chooses whether they would like to play online or offline
         if(online){
             new Online();
         }else{
