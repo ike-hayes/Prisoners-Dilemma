@@ -102,7 +102,7 @@ public class ServerSide
             roundScores[player]+=4;
         else if (playerMove.equals("SNITCH") && OpponentMove.equals("SILENT"))
             roundScores[player]+=0;
-        else  System.out.println("Recieved incorrect choices");          
+        else  System.out.println("Recieved incorrect choices");
     }
     void playMatch(){
         DataInputStream theysay;
@@ -120,23 +120,28 @@ public class ServerSide
         }
         for (int round=1;round<=roundsToPlay;round++){
             for (int i=0;i< MAXPLAYERS;i++){
-                System.out.print("Listening for "+usernames[i]+" move.  ");
+                System.out.println("Listening for "+usernames[i]+" move.  ");
                 try{
                     choices[i]=streamIn[i].readUTF().toUpperCase();
-                    System.out.print(usernames[i]+" has chosen "+choices[i]);
+                    System.out.println(usernames[i]+" has chosen "+choices[i]);
                 } catch (Exception e){
                     System.out.println("Couldn't recieve player move");
                 }
             }       
             if (round<roundsToPlay){
                 for (int i=0;i<MAXPLAYERS;i++){
-                    System.out.print("Sharing other players move to"+usernames[i]);
+                    System.out.println("Sharing other players move to "+usernames[i]);
                     try {
                         streamOut[i].writeUTF(choices[opponent(i)]);
                         updateScore(i,choices[i],choices[opponent(i)]);
                     } catch (Exception e){
                         System.out.println("Couldn't share opponent choice with "+usernames[i]);
                     }
+                }
+            }
+            if(round<roundsToPlay){
+                for (int i=0;i<MAXPLAYERS;i++){
+                    System.out.println("Sharing scores to "+usernames[i]);
                     try{
                         streamOut[i].writeUTF(Integer.toString(roundScores[i]));
                         streamOut[i].writeUTF(Integer.toString(roundScores[opponent(i)]));
@@ -155,7 +160,7 @@ public class ServerSide
             }
         }
         for (int i=0;i<MAXPLAYERS;i++){
-            System.out.print("Sending "+usernames[i]+" their score");
+            System.out.println("Sending "+usernames[i]+" their score");
             try{
                 streamOut[i].writeUTF(Integer.toString(roundScores[i]));
             }catch(Exception e){
@@ -163,7 +168,7 @@ public class ServerSide
             }
         }
         for (int i=0;i<MAXPLAYERS;i++){
-            System.out.print("Shutting down connections to "+usernames[i]);
+            System.out.println("Shutting down connections to "+usernames[i]);
             try {
                 streamOut[i].close();
                 streamIn[i].close();
