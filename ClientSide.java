@@ -89,10 +89,16 @@ public class ClientSide
                 streamOut.writeUTF(action);
                 actionChosen=false;
                 incoming=streamIn.readUTF();
-                if(incoming.equals("SNITCH") || incoming.equals("SILENT")) System.out.println("Your opponent chose: "+incoming);
-                if(incoming.equals("Game over!")) playing=false;
-                System.out.println("Score: "+streamIn.readUTF()+"\n"
-                                   +"Opponent score: "+streamIn.readUTF());
+                if(incoming.equals("SNITCH") || incoming.equals("SILENT")){ 
+                    System.out.println("Your opponent chose: "+incoming);
+                } 
+                if(incoming.equals("Game over!")){ 
+                    System.out.println(incoming);
+                    playing=false;
+                }else{
+                    System.out.println("Score: "+streamIn.readUTF()+"\n"
+                                       +"Opponent score: "+streamIn.readUTF());
+                }
                 streamOut.flush();
             }
             streamOut.close();
