@@ -112,7 +112,7 @@ public class ServerSide
         DataOutputStream Isay;
         String choices[] = new String[MAXPLAYERS];
         System.out.println("Starting game with "+usernames[0]+" and "+usernames[1]);
-        int roundsToPlay=2;
+        int roundsToPlay=3;
         //the game starts. currently it is only 5 rounds for testing purposes
         for (int i=0;i<MAXPLAYERS;i++){
             System.out.println("Telling "+usernames[i]+" game has started");
@@ -122,7 +122,7 @@ public class ServerSide
                 System.out.println("Couldn't start the game");
             }                
         }
-        /*these for loops are used all throughout the gameplay section because
+        /* these for loops are used all throughout the gameplay section because
          * the server has to talk to each player individually. This one sends
          * a message to each client telling them the game has started
          */
@@ -177,6 +177,7 @@ public class ServerSide
             System.out.println("Sending "+usernames[i]+" their score");
             try{
                 streamOut[i].writeUTF(Integer.toString(roundScores[i]));
+                streamOut[i].writeUTF(Integer.toString(roundsToPlay));
             }catch(Exception e){
                 System.out.println("Couldn't share scores with "+usernames[i]);
             }

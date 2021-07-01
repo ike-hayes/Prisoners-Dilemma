@@ -91,14 +91,14 @@ public class ClientSide
                 incoming=streamIn.readUTF();
                 if(incoming.equals("SNITCH") || incoming.equals("SILENT")){ 
                     System.out.println("Your opponent chose: "+incoming);
-                } 
-                if(incoming.equals("Game over!")){ 
+                    System.out.println("Score: "+streamIn.readUTF()+"\n"
+                                       +"Opponent score: "+streamIn.readUTF());
+                }else if (incoming.equals("Game over!")){ 
                     System.out.println(incoming);
                     playing=false;
                 }else{
-                    System.out.println("Score: "+streamIn.readUTF()+"\n"
-                                       +"Opponent score: "+streamIn.readUTF());
-                }
+                    System.out.println("Error has occured");
+                }    
                 streamOut.flush();
             }
             streamOut.close();
@@ -107,10 +107,12 @@ public class ClientSide
         }
         try{
             score=Double.parseDouble(streamIn.readUTF());
-            saveScores();
+            roundsPlayed=Double.parseDouble(streamIn.readUTF());
+            System.out.println("Score received");
         }catch(Exception e){
-            System.out.println("There was an error saving your scores.");
+            System.out.println("There was an error receiving scores");
         }
+        saveScores();
     }
     public void accessScores(){
         try{
@@ -133,6 +135,7 @@ public class ClientSide
     }
     public void saveScores(){
         try{
+            System.out.println("Saving scores");
             FileWriter scoreTracker=new FileWriter(playerScore);
             scoreTracker.append("score");
             scoreTracker.append(",");
