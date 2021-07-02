@@ -108,11 +108,12 @@ public class ServerSide
         //updates the scores for the players after each round
     }
     void playMatch(){
+        readyToPlay=false;
         DataInputStream theysay;
         DataOutputStream Isay;
         String choices[] = new String[MAXPLAYERS];
         System.out.println("Starting game with "+usernames[0]+" and "+usernames[1]);
-        int roundsToPlay=3;
+        int roundsToPlay=1;
         //the game starts. currently it is only 5 rounds for testing purposes
         for (int i=0;i<MAXPLAYERS;i++){
             System.out.println("Telling "+usernames[i]+" game has started");
@@ -174,23 +175,26 @@ public class ServerSide
         }
         //after all the rounds have been played the scores are updated for a final time
         for (int i=0;i<MAXPLAYERS;i++){
-            System.out.println("Sending "+usernames[i]+" their score");
+            System.out.println("Sending "+usernames[i]+" their final score");
             try{
+                System.out.println("about to send score");
                 streamOut[i].writeUTF(Integer.toString(roundScores[i]));
+                System.out.println("about to send rounds played");
                 streamOut[i].writeUTF(Integer.toString(roundsToPlay));
             }catch(Exception e){
-                System.out.println("Couldn't share scores with "+usernames[i]);
+                System.out.println("Couldn't send final scores to "+usernames[i]);
+                e.printStackTrace();
             }
-        }
+        }     
         for (int i=0;i<MAXPLAYERS;i++){
             System.out.println("Shutting down connections to "+usernames[i]);
             try {
                 streamOut[i].close();
                 streamIn[i].close();
-                connectedClients--;
+                connectedClients--; 
             } catch (Exception e){
                 System.out.println("Couldn't close connection with "+usernames[i]);
-            }
+            }     
         }
     }
     int opponent(int player){

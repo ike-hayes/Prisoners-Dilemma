@@ -101,16 +101,16 @@ public class ClientSide
                 }    
                 streamOut.flush();
             }
+            try{
+                score=Double.parseDouble(streamIn.readUTF());
+                roundsPlayed=Double.parseDouble(streamIn.readUTF());
+                System.out.println("Score received");
+            }catch(Exception e1){
+                System.out.println("There was an error receiving scores");
+            }
             streamOut.close();
         }catch(Exception e){
             System.out.println("Something went wrong playing the game");
-        }
-        try{
-            score=Double.parseDouble(streamIn.readUTF());
-            roundsPlayed=Double.parseDouble(streamIn.readUTF());
-            System.out.println("Score received");
-        }catch(Exception e){
-            System.out.println("There was an error receiving scores");
         }
         saveScores();
     }
