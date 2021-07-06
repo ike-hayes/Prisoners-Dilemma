@@ -17,6 +17,7 @@ public class ClientSide
     String roundsPlayedLine[];
     String username;
     String usernameLine[];
+    double oppScore;
     double score;
     double totalScore;
     double roundsPlayed;
@@ -39,6 +40,7 @@ public class ClientSide
     {
         // initialise instance variables
         accessScores();
+        //the scores are accessed here to find the players username 
         try{
             socket=new Socket(IP,PORT);
             streamOut=new DataOutputStream(socket.getOutputStream());
@@ -47,6 +49,7 @@ public class ClientSide
         }catch(Exception e){
             System.out.println("Something went wrong connecting to that host");
         }
+        //their username is then sent to the server
         try{
             handOff=Integer.parseInt(streamIn.readUTF());
             streamOut.close();
@@ -58,12 +61,14 @@ public class ClientSide
         }catch(Exception e){
             System.out.println("Something went wrong handing off to another port");
         }
+        //the client recieves the handoff port from the server, closes its connections and reconnects on the new port
         System.out.println("Joined "+IP+" successfully!");
         try{
             System.out.println("Waiting for game to start");
             incoming=streamIn.readUTF();
             System.out.println(incoming);
             if(incoming.equals("Game has started!")) playing=true;
+            //once two players have connected to the server it will send the message saying the game has started
             while(playing){
                 System.out.println("Would you like to snitch on your partner?");
                 while(!actionChosen){
@@ -71,6 +76,7 @@ public class ClientSide
                         case("y"):
                         case("yes"):
                         case("snitch"):
+                                        System.out.println("You have chosen to snitch");
                                         action="SNITCH";
                                         actionChosen=true;
                                         break;
@@ -78,6 +84,7 @@ public class ClientSide
                         case("no"):
                         case("silent"):
                         case("stay silent"):
+                                            System.out.println("You have chosen to stay silent");
                                             action="SILENT";
                                             actionChosen=true;
                                             break;
@@ -86,33 +93,52 @@ public class ClientSide
                                 break;
                     }
                 }
+                //the player chooses what action to take
                 streamOut.writeUTF(action);
                 actionChosen=false;
                 incoming=streamIn.readUTF();
+                /* the action is sent and then the client reads in a message from the server.
+                 * if this is a normal round the message will contain what the other player chose.
+                 * however, if this is the last round, the message will instead be "Game over!".
+                 */
                 if(incoming.equals("SNITCH") || incoming.equals("SILENT")){ 
                     System.out.println("Your opponent chose: "+incoming);
-                    System.out.println("Score: "+streamIn.readUTF()+"\n"
-                                       +"Opponent score: "+streamIn.readUTF());
+                    score=Double.parseDouble(streamIn.readUTF());
+                    oppScore=Double.parseDouble(streamIn.readUTF());
+                    System.out.println("Score: "+(int)score+"\n"
+                                       +"Opponent score: "+(int)oppScore);
+                    /* if the message contains the opponents move, it is printed out.
+                     * the server then waits for two more messages containing the current 
+                     * score of both players.
+                     */
                 }else if (incoming.equals("Game over!")){ 
                     System.out.println(incoming);
                     playing=false;
+                    //otherwise if the message is game over the game will stop
                 }else{
-                    System.out.println("Error has occured");
+                    System.out.println("Unexpected message received");
                 }    
                 streamOut.flush();
             }
             try{
                 score=Double.parseDouble(streamIn.readUTF());
+                oppScore=Double.parseDouble(streamIn.readUTF());
                 roundsPlayed=Double.parseDouble(streamIn.readUTF());
-                System.out.println("Score received");
+                System.out.println("Your final score: "+(int)score);
+                System.out.println("Your opponents final score: "+(int)oppScore);
+                System.out.println("You played: "+(int)roundsPlayed+" rounds");
             }catch(Exception e1){
                 System.out.println("There was an error receiving scores");
             }
+            /* after the game is finished the server will send two final messages,
+             * which are the players final score and the number of rounds played
+             */
             streamOut.close();
         }catch(Exception e){
             System.out.println("Something went wrong playing the game");
         }
         saveScores();
+        //finally, the scores are saved
     }
     public void accessScores(){
         try{
@@ -130,7 +156,6 @@ public class ClientSide
              */
         }catch(IOException e){
             System.out.println("There was an error retrieving your past scores");
-            //This code is inside a try statement so I can print something out if something goes wrong
         }
     }
     public void saveScores(){
@@ -150,7 +175,7 @@ public class ClientSide
             scoreTracker.append(username);
             scoreTracker.flush();
             scoreTracker.close();
-            //Updates the total score and rounds played across mutiple sessions
+            //Updates the total score, rounds played and username across mutiple sessions
         }catch(IOException e){
             System.out.println("There was an error saving your scores.");
         }

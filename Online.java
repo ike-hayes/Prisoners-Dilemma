@@ -74,7 +74,6 @@ public class Online
         if(host){
             try{
                 ServerSide serverHost=new ServerSide();
-                ClientSide player=new ClientSide("localhost");
             }catch(Exception e){
                 System.out.println("Something went wrong hosting the server");
             }

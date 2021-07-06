@@ -30,7 +30,8 @@ public class ServerSide
     {
         // initialise instance variables
         try{
-            System.out.println("Your IP is "+InetAddress.getLocalHost().getHostAddress()+" tell your friend to connect here!");
+            System.out.println("Your IP is "+InetAddress.getLocalHost().getHostAddress()+", tell your friend to connect here!");
+            System.out.println("If you wish to play on this computer, you will need to open a client");
             server=new ServerSocket(PORT);
         } catch(Exception e){
             System.out.println("Something went wrong hosting the server");
@@ -45,8 +46,8 @@ public class ServerSide
                 //when a client connects it creates an intial input and output stream with them                    
                 DataOutputStream say=new DataOutputStream(socket.getOutputStream());
                 DataInputStream clientSays = new DataInputStream(socket.getInputStream());
-                String theySaid=(String)clientSays.readUTF();
-                playerName=theySaid;
+                String usernameInput=(String)clientSays.readUTF();
+                playerName=usernameInput;
                 //we find out the players username
                 try {
                     thread=new ServerSocket(0);
@@ -63,7 +64,7 @@ public class ServerSide
                 socket=thread.accept();
                 //after closing all the connections the server connects to the client again on the new port
                 say=new DataOutputStream(socket.getOutputStream());
-                clientSays = new DataInputStream(socket.getInputStream());
+                clientSays=new DataInputStream(socket.getInputStream());
                 say.flush();
 
                 addGameSession(socket,clientSays,say);
@@ -78,6 +79,7 @@ public class ServerSide
             } catch (Exception e1){
                 System.out.println("Couldn't close the server");
             }
+            //if something goes wrong, the server is closed.
         }
         try {
             socket.close();
@@ -109,11 +111,9 @@ public class ServerSide
     }
     void playMatch(){
         readyToPlay=false;
-        DataInputStream theysay;
-        DataOutputStream Isay;
         String choices[] = new String[MAXPLAYERS];
         System.out.println("Starting game with "+usernames[0]+" and "+usernames[1]);
-        int roundsToPlay=1;
+        int roundsToPlay=5;
         //the game starts. currently it is only 5 rounds for testing purposes
         for (int i=0;i<MAXPLAYERS;i++){
             System.out.println("Telling "+usernames[i]+" game has started");
@@ -129,12 +129,12 @@ public class ServerSide
          */
         for (int round=1;round<=roundsToPlay;round++){
             for (int i=0;i< MAXPLAYERS;i++){
-                System.out.println("Listening for "+usernames[i]+" move.  ");
+                System.out.println("Waiting for "+usernames[i]+"'s move.  ");
                 try{
                     choices[i]=streamIn[i].readUTF().toUpperCase();
                     System.out.println(usernames[i]+" has chosen "+choices[i]);
                 } catch (Exception e){
-                    System.out.println("Couldn't recieve player move");
+                    System.out.println("Couldn't recieve "+usernames[i]+" move");
                 }
             }
             //the server receives each players choice of move
@@ -145,7 +145,7 @@ public class ServerSide
                         streamOut[i].writeUTF(choices[opponent(i)]);
                         updateScore(i,choices[i],choices[opponent(i)]);
                     } catch (Exception e){
-                        System.out.println("Couldn't share opponent choice with "+usernames[i]);
+                        System.out.println("Couldn't share opponent's choice with "+usernames[i]);
                     }
                 }
             }
@@ -177,15 +177,14 @@ public class ServerSide
         for (int i=0;i<MAXPLAYERS;i++){
             System.out.println("Sending "+usernames[i]+" their final score");
             try{
-                System.out.println("about to send score");
                 streamOut[i].writeUTF(Integer.toString(roundScores[i]));
-                System.out.println("about to send rounds played");
+                streamOut[i].writeUTF(Integer.toString(roundScores[opponent(i)]));
                 streamOut[i].writeUTF(Integer.toString(roundsToPlay));
             }catch(Exception e){
                 System.out.println("Couldn't send final scores to "+usernames[i]);
-                e.printStackTrace();
             }
-        }     
+        }
+        //each player is then sent the final scores along with how many rounds they played
         for (int i=0;i<MAXPLAYERS;i++){
             System.out.println("Shutting down connections to "+usernames[i]);
             try {
@@ -196,8 +195,10 @@ public class ServerSide
                 System.out.println("Couldn't close connection with "+usernames[i]);
             }     
         }
+        //finally, the server closes the connections with each player. The server will continue to run
     }
     int opponent(int player){
         return(MAXPLAYERS-player-1);
+        //this method only works when there are two players. If the player is number 0 it will return 1 and vice versa
     }
 }
