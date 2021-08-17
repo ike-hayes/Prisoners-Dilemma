@@ -58,7 +58,7 @@ public class SinglePlayer
         }else{
             System.out.println("Your gameplay rating is: "+gameplayRating+"\n");
         }
-        /*the gameplay rating should indicate how well the player does
+        /* the gameplay rating should indicate how well the player does
          * over multiple sessions. It is made to show how well the player does
          * at keeping their own score low.
          */
@@ -68,7 +68,7 @@ public class SinglePlayer
                            +"Frank - fair \n"
                            +"Robert - forgiving \n"
                            +"Or play against Hugh, an approximation of a human player (recommended)"); 
-        //The player can select which opponent to play agaisnt, who will use different strategies
+        //The player can select which opponent to play against, who will use different strategies
         while(!oppChosen){
             opp=input.nextLine().toUpperCase();
             if(opp.equals("JAMES") || opp.equals("ROBERT") || opp.equals("FRANK") || opp.equals("SNAKE") || opp.equals("HUGH")){

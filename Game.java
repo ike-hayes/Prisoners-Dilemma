@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Game
 {
     Scanner input=new Scanner(System.in);
-    //here I create the scanner to take input
+    //here I create the scanner to take input from the player
     boolean online;
     boolean gameTypeChosen=false;
     String gameType;
@@ -34,7 +34,7 @@ public class Game
                     +"Try to keep your sentence as low as possible! \n"
                     +"\n"
                     +"Let's play!");
-        //Explaing how to play to the player
+        //Explaing how to play the game
         System.out.println("Would you like to play offline, or online? \n" 
                            +"Your offline and online scores are saved seperatly");
         while(!gameTypeChosen){

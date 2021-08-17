@@ -10,7 +10,6 @@ import java.net.InetAddress;
 import java.util.Scanner;
 public class ClientSide
 {
-    // instance variables - replace the example below with your own
     File playerScore=new File("onlinescore.csv"); 
     Scanner input=new Scanner(System.in);
     String scoreLine[];
@@ -33,12 +32,13 @@ public class ClientSide
     final int PORT=3456;
     String incoming;
     int handOff;
+    
+    //variables used for the client side
     /**
      * Constructor for objects of class ClientSide
      */
     public ClientSide(String IP)
     {
-        // initialise instance variables
         accessScores();
         //the scores are accessed here to find the players username 
         try{
@@ -61,7 +61,10 @@ public class ClientSide
         }catch(Exception e){
             System.out.println("Something went wrong handing off to another port");
         }
-        //the client recieves the handoff port from the server, closes its connections and reconnects on the new port
+        /* The server talks to each client on a different port. When a client connects,
+         * it joins a default port before being given a handoff port. The client recieves 
+         * the handoff port from the server, closes its connections and reconnects on the new port
+         */
         System.out.println("Joined "+IP+" successfully!");
         try{
             System.out.println("Waiting for game to start");
@@ -93,7 +96,7 @@ public class ClientSide
                                 break;
                     }
                 }
-                //the player chooses what action to take
+                //the player chooses what action to take. invalid choices are not accepted
                 streamOut.writeUTF(action);
                 actionChosen=false;
                 incoming=streamIn.readUTF();
@@ -132,6 +135,7 @@ public class ClientSide
             }
             /* after the game is finished the server will send two final messages,
              * which are the players final score and the number of rounds played
+             * The client prints out both players score to let them know how they did.
              */
             streamOut.close();
         }catch(Exception e){

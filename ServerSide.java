@@ -28,11 +28,14 @@ public class ServerSide
      */
     public ServerSide()
     {
-        // initialise instance variables
         try{
             System.out.println("Your IP is "+InetAddress.getLocalHost().getHostAddress()+", tell your friend to connect here!");
             System.out.println("If you wish to play on this computer, you will need to open a client");
             server=new ServerSocket(PORT);
+            /* It is a bit clunky, but for somemone to host and play
+            * a game on the same computer they need to open another
+            * instance to run the client.
+            */
         } catch(Exception e){
             System.out.println("Something went wrong hosting the server");
         }
@@ -48,16 +51,16 @@ public class ServerSide
                 DataInputStream clientSays = new DataInputStream(socket.getInputStream());
                 String usernameInput=(String)clientSays.readUTF();
                 playerName=usernameInput;
-                //we find out the players username
+                // this intial connection is used to find the players username
                 try {
                     thread=new ServerSocket(0);
                     System.out.println("Handing off to port: "+thread.getLocalPort());
                 } catch (Exception e){
                     System.out.println("Failed to create handoff port");
                     System.out.println(e);
-                }
-                //and then hand off the connection to a free port 
+                } 
                 say.writeUTF(thread.getLocalPort()+"");
+                //the server then sends the player the handoff port to connect to
                 say.close();
                 clientSays.close();
                 socket.close();
@@ -94,7 +97,10 @@ public class ServerSide
         streamIn[connectedClients]=theySaid;
         connectedClients++;
         System.out.println(usernames[connectedClients-1]+" has joined successfully!");
-        //when a player joins, their name is stored along with the port they are talking on, and input and output streams
+        /*when a player joins, their name is stored along with the port they 
+         * are talking on, and input and output streams. This is used to differentiate
+         * between players and send messages to individuals.
+         */
         if (connectedClients==MAXPLAYERS) readyToPlay=true;                    
     }
     void updateScore(int player, String playerMove, String OpponentMove){
@@ -114,7 +120,7 @@ public class ServerSide
         String choices[] = new String[MAXPLAYERS];
         System.out.println("Starting game with "+usernames[0]+" and "+usernames[1]);
         int roundsToPlay=5;
-        //the game starts. currently it is only 5 rounds for testing purposes
+        //the game starts. Currently, the players play 5 rounds. This can be changed easily.
         for (int i=0;i<MAXPLAYERS;i++){
             System.out.println("Telling "+usernames[i]+" game has started");
             try {
