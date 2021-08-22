@@ -105,11 +105,11 @@ public class ClientSide
                  * however, if this is the last round, the message will instead be "Game over!".
                  */
                 if(incoming.equals("SNITCH") || incoming.equals("SILENT")){ 
-                    System.out.println("Your opponent chose: "+incoming);
+                    System.out.println("Your partner chose: "+incoming);
                     score=Double.parseDouble(streamIn.readUTF());
                     oppScore=Double.parseDouble(streamIn.readUTF());
                     System.out.println("Score: "+(int)score+"\n"
-                                       +"Opponent score: "+(int)oppScore);
+                                       +"Partner score: "+(int)oppScore);
                     /* if the message contains the opponents move, it is printed out.
                      * the server then waits for two more messages containing the current 
                      * score of both players.
@@ -128,7 +128,7 @@ public class ClientSide
                 oppScore=Double.parseDouble(streamIn.readUTF());
                 roundsPlayed=Double.parseDouble(streamIn.readUTF());
                 System.out.println("Your final score: "+(int)score);
-                System.out.println("Your opponents final score: "+(int)oppScore);
+                System.out.println("Your partner's final score: "+(int)oppScore);
                 System.out.println("You played: "+(int)roundsPlayed+" rounds");
             }catch(Exception e1){
                 System.out.println("There was an error receiving scores");
