@@ -134,8 +134,8 @@ public class SinglePlayer
                 //If the player chooses something invalid it will ask them to choose again
             }
             //This controls the outcomes for what the player and computer chose and adds to their respective scores
-            System.out.println("You are serving "+score+" years in prison \n"
-                           +"Your partner is serving "+oppScore+" years in prison"
+            System.out.println("You are serving "+(int)score+" years in prison \n"
+                           +"Your partner is serving "+(int)oppScore+" years in prison"
                            +"\n");
             roundsPlayed++;
             //The game will keep going until the player chooses to stop
