@@ -69,8 +69,8 @@ public class Game
                     +"\n"
                     +"Let's play!");
         //Explaing how to play to the player
-        System.out.println("You have played: "+totalRoundsPlayed+" rounds \n"
-                            +"You are serving: "+totalScore+" years in prison");
+        System.out.println("You have played: "+(int)totalRoundsPlayed+" rounds \n"
+                            +"You are serving: "+(int)totalScore+" years in prison");
         if(totalScore==0){
             System.out.println("Your gameplay rating is: Perfect! \n");
         }else{
@@ -147,15 +147,15 @@ public class Game
                 //If the player chooses something invalid it will ask them to choose again
             }
             //This controls the outcomes for what the player and computer chose and adds to their respective scores
-            System.out.println("You are serving "+score+" years in prison \n"
-                           +"Your partner is serving "+oppScore+" years in prison"
+            System.out.println("You are serving "+(int)score+" years in prison \n"
+                           +"Your partner is serving "+(int)oppScore+" years in prison"
                            +"\n");
             roundsPlayed++;
             //The game will keep going until the player chooses to stop
         }
         System.out.println("Thank you for playing! Here are your final scores: \n"
-                    +"You will serve "+score+" years in prison \n"
-                    +"Your partner will serve "+oppScore+" years in prison");
+                    +"You will serve "+(int)score+" years in prison \n"
+                    +"Your partner will serve "+(int)oppScore+" years in prison");
         if(oppScore>score){
             System.out.println("Looks like you came out better off!");
         }else if(score>oppScore){
