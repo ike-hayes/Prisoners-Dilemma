@@ -36,7 +36,7 @@ public class Game
                     +"Let's play!");
         //Explaing how to play the game
         System.out.println("Would you like to play offline, or online? \n" 
-                           +"Your offline and online scores are saved seperatly");
+                           +"Your offline and online scores are saved separately");
         while(!gameTypeChosen){
             gameType=input.nextLine().toUpperCase();
             if(gameType.equals("OFFLINE")){
